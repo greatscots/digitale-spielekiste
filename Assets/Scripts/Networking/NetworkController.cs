@@ -10,6 +10,8 @@ namespace DigitaleSpielekiste
 
         private static RoomController room;
 
+        private static PhotonNetworkController photonNetworkController = new PhotonNetworkController();
+
         /// <summary>
         /// Checks if the Device is connected to a Room.
         /// </summary>
@@ -25,6 +27,17 @@ namespace DigitaleSpielekiste
         /// </remarks>
         public static RoomController GetRoom() {
             return room;
+        }
+
+
+        /// <summary>
+        /// Initializes the NetworkController
+        /// </summary>
+        /// <returns>
+        /// Calls the onInitialized callback when ready.
+        /// </summary>
+        public static void Initialize() {
+            photonNetworkController.Initialize();
         }
 
         /// <summary>
@@ -69,41 +82,15 @@ namespace DigitaleSpielekiste
 
         public static NetworkEvent<RoomController> onCreatedRoom = delegate {};
 
-        public static NetworkEvent<string> onLeftRoom = delegate {};
+        public static NetworkEvent onInitialized = delegate {};
 
-        public static NetworkEvent<string> onLostConnection = delegate {};
+        public static NetworkEvent onLeftRoom = delegate {};
 
-
-        /// Add Event Listeners of return-type <c>RoomController</c>
-        public static bool addEventListener(string name, NetworkEvent<RoomController> callback){
-            switch(name) {
-                case "joined-room":
-                    onJoinedRoom += callback;
-                    return true;
-                case "created-room":
-                    onCreatedRoom += callback;
-                    return true;
-            }
-
-            return false;
-        }
-
-        /// Add Event Listeners with return-type <c>String</c>
-        public static bool addEventListener(string name, NetworkEvent<string> callback) {
-            switch(name) {
-                case "left-room":
-                    onLeftRoom += callback;
-                    return true;
-                case "lost-connection":
-                    onLostConnection += callback;
-                    return true;
-            }
-
-            return false;
-        }
+        public static NetworkEvent<string> onDisconnected = delegate {};
 
         #endregion
 
+        public delegate void NetworkEvent();
         public delegate void NetworkEvent<T>(T args);
     }
 }
